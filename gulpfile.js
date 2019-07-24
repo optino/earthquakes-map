@@ -220,7 +220,7 @@ gulp.task('browser-sync', () => {
 
     gulp.watch([
         './src/**/*.less',
-    ], gulp.series('build:compile-less', 'build:docs'));
+    ], gulp.series('build:compile-less'));
 
     gulp.watch([
         './src/pages/**/*.pug'
