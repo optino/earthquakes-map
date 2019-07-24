@@ -22,13 +22,9 @@ export class EarthquakeLoader {
 
         _.ajax.get(url, (data) => {
             $.STORE.set('earthquakes-data', data);
+            $.EVENTS.fireEvent('earthquakes-data-loaded');
             $.EVENTS.fireEvent('earthquakes-data-updated');
         });
-    }
-
-
-    constructor() {
-        $.EVENTS.addEvent('earthquakes-data-updated');
     }
 }
 

@@ -26,13 +26,13 @@ export default class EarthRenderer extends $.FACTORY.BaseComponent {
 
         this.earth = null;
         this.stars = null;
+        this.pointsMeshesCache = null;
 
         this.state = _.extend(this.state, {
             hoveredPoint: null
         });
 
         this.init();
-        this.animate();
 
         this.domCache.element.appendChild(this.renderer.domElement);
     }
@@ -121,7 +121,7 @@ export default class EarthRenderer extends $.FACTORY.BaseComponent {
 
 
     initWorld() {
-        this.earth = new $.MODULES.sceneObjects.Earth('./images/earth.jpg');
+        this.earth = new $.MODULES.sceneObjects.Earth('./images/earth.jpg', './images/earth-small.jpg');
         this.stars = new $.MODULES.sceneObjects.Stars('./images/stars.jpg');
 
         this.scene.add(this.earth.mesh);
@@ -135,6 +135,10 @@ export default class EarthRenderer extends $.FACTORY.BaseComponent {
         this.domCache.element.addEventListener('dblclick', this.onDoubleClick.bind(this));
 
         $.EVENTS.addEventListener('earthquake-points-updated', this.onPointsUpdated.bind(this));
+        $.EVENTS.addEventListener('all-resources-loaded', () => {
+            this.animate();
+            $.EVENTS.fireEvent('animation-started');
+        });
 
         this.onWindowResize();
     }
@@ -147,12 +151,15 @@ export default class EarthRenderer extends $.FACTORY.BaseComponent {
             this.scene.remove(oldPoints);
         }
 
+        this.pointsMeshesCache = [];
+
         const newPoints = new THREE.Group();
 
         newPoints.name = 'points';
 
         _.forEach(this.earth.points, (point) => {
             newPoints.add(point.mesh);
+            this.pointsMeshesCache.push(point.mesh);
         });
 
         this.scene.add(newPoints);
@@ -160,13 +167,7 @@ export default class EarthRenderer extends $.FACTORY.BaseComponent {
 
 
     useRaycaster() {
-        const meshes = [];
-
-        _.forEach(this.earth.points, (point) => {
-            meshes.push(point.mesh);
-        });
-
-        const intersects = this.raycaster.intersectObjects(meshes);
+        const intersects = this.raycaster.intersectObjects(this.pointsMeshesCache);
 
         if (intersects[0]) {
             this.domCache.element.style.cursor = 'pointer';

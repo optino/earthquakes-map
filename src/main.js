@@ -20,6 +20,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     $.EVENTS.addEvent('main-executed');
 
+    $.EVENTS.addEvent('texture-loaded');
+    $.EVENTS.addEvent('earthquakes-data-loaded');
+    $.EVENTS.addEvent('all-resources-loaded');
+
+    $.EVENTS.addEvent('earthquakes-data-updated');
+    $.EVENTS.addEvent('earthquake-points-updated');
+
+    $.EVENTS.addEvent('animation-started');
+
     window.Muilessium.DEPENDENCIES = _.extend($.DEPENDENCIES, DEPENDENCIES);
     window.Muilessium.POLYFILLS    = _.extend($.POLYFILLS,    POLYFILLS);
     window.Muilessium.UTILS        = _.extend($.UTILS,        UTILS);

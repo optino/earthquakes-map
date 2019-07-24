@@ -16,8 +16,6 @@ class Loaders {
         this.loadingManager = new THREE.LoadingManager();
         this.imageLoader = new THREE.ImageLoader(this.loadingManager);
         this.earthquakeLoader = earthquakeLoader;
-
-        $.EVENTS.addEvent('texture-loaded');
     }
 }
 
