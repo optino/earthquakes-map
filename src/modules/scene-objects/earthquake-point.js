@@ -19,51 +19,71 @@ export default class EarthquakePoint extends SceneObject {
     });
 
 
-    static createMesh(positionXYZ, size, color) {
-        const sphere = new THREE.SphereGeometry(size * 3 / 100, 12, 12);
+    static colors = Object.freeze({
+        orange: 0xff9800,
+        red: 0xf44336
+    });
 
-        const material = new THREE.MeshBasicMaterial({
-            color,
+
+    static materialsCache = Object.freeze({
+        orange: new THREE.MeshBasicMaterial({
+            color: EarthquakePoint.colors.orange,
             opacity: 0.95,
             transparent: true
-        });
+        }),
+        red: new THREE.MeshBasicMaterial({
+            color: EarthquakePoint.colors.red,
+            opacity: 0.95,
+            transparent: true
+        })
+    });
 
-        const mesh = new THREE.Mesh(sphere, material);
 
-        mesh.position.set(...positionXYZ);
+    static spheresCache = Object.freeze({
+        small:  new THREE.SphereGeometry(0.15, 12, 12),
+        medium: new THREE.SphereGeometry(0.45, 12, 12),
+        big:    new THREE.SphereGeometry(0.75, 12, 12),
+        extra:  new THREE.SphereGeometry(1.5, 12, 12)
+    });
 
-        return mesh;
-    }
 
-
-    static chooseColor(magnitude) {
+    static chooseMaterial(magnitude) {
         let result;
 
-        if (magnitude < 6) {
-            result = 0xff9800;
-        } else if (magnitude < 7) {
-            result = 0xff9800;
-        } else if (magnitude < 8) {
-            result = 0xf44336;
+        if (magnitude < 7) {
+            result = EarthquakePoint.materialsCache.orange.clone();
         } else {
-            result = 0xf44336;
+            result = EarthquakePoint.materialsCache.red.clone();
         } 
 
         return result;
     }
 
 
-    static chooseSize(magnitude) {
+    static chooseColor(magnitude) {
+        let result;
+
+        if (magnitude < 7) {
+            result = EarthquakePoint.colors.orange;
+        } else {
+            result = EarthquakePoint.colors.red;
+        } 
+
+        return result;
+    }
+
+
+    static chooseSphere(magnitude) {
         let result;
 
         if (magnitude < 6) {
-            result = magnitude;
+            result = EarthquakePoint.spheresCache.small.clone();
         } else if (magnitude < 7) {
-            result = magnitude * 3;
+            result = EarthquakePoint.spheresCache.medium.clone();
         } else if (magnitude < 8) {
-            result = magnitude * 5;
+            result = EarthquakePoint.spheresCache.big.clone();
         } else {
-            result = magnitude * 10;
+            result = EarthquakePoint.spheresCache.extra.clone();
         }
 
         return result;
@@ -87,11 +107,12 @@ export default class EarthquakePoint extends SceneObject {
     init() {
         const magnitude = this.feature.properties.mag;
 
-        this.mesh = EarthquakePoint.createMesh(
-            this.positionXYZ,
-            EarthquakePoint.chooseSize(magnitude),
-            EarthquakePoint.chooseColor(magnitude)
+        this.mesh = new THREE.Mesh(
+            EarthquakePoint.chooseSphere(magnitude),
+            EarthquakePoint.chooseMaterial(magnitude)
         );
+
+        this.mesh.position.set(...(this.positionXYZ));
 
         if (inLast24Hours(this.feature.properties.time)) {
             this.setState(EarthquakePoint.states.pulse);
