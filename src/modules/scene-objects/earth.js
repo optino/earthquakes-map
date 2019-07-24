@@ -18,7 +18,7 @@ export default class Earth extends SceneObject {
     static radius = 30;
 
 
-    static createMesh(textureURL) {
+    static createMesh(textureURL, textureFallbackURL) {
         const sphere = new THREE.SphereGeometry(Earth.radius, 64, 64);
 
         const texture = new THREE.Texture();
@@ -27,11 +27,20 @@ export default class Earth extends SceneObject {
             map: texture
         });
 
-        Earth.loaders.imageLoader.load(textureURL, (image) => {
-            texture.image = image;
+        Earth.loaders.imageLoader.load(textureFallbackURL, (fallbackImage) => {
+            texture.image = fallbackImage;
             texture.needsUpdate = true;
 
             $.EVENTS.fireEvent('texture-loaded');
+
+            $.EVENTS.addEventListener('animation-started', () => {
+                Earth.loaders.imageLoader.load(textureURL, (image) => {
+                    texture.image = image;
+                    texture.needsUpdate = true;
+
+                    // $.EVENTS.fireEvent('texture-loaded');
+                });
+            });
         });
 
         return new THREE.Mesh(sphere, material);
@@ -50,10 +59,10 @@ export default class Earth extends SceneObject {
     }
 
 
-    constructor(textureURL) {
+    constructor(textureURL, textureFallbackURL) {
         super();
 
-        this.mesh = Earth.createMesh(textureURL);
+        this.mesh = Earth.createMesh(textureURL, textureFallbackURL);
         this.points = [];
 
         this.initEventListeners();
@@ -63,7 +72,6 @@ export default class Earth extends SceneObject {
 
 
     initEventListeners() {
-        $.EVENTS.addEvent('earthquake-points-updated');
         $.EVENTS.addEventListener('earthquakes-data-updated', this.onDataUpdated.bind(this));
     }
 
