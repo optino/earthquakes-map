@@ -42,8 +42,8 @@ export default class EarthquakePoint extends SceneObject {
     static spheresCache = Object.freeze({
         small:  new THREE.SphereGeometry(0.15, 12, 12),
         medium: new THREE.SphereGeometry(0.45, 12, 12),
-        big:    new THREE.SphereGeometry(0.75, 12, 12),
-        extra:  new THREE.SphereGeometry(1.5, 12, 12)
+        big:    new THREE.SphereGeometry(0.9, 12, 12),
+        extra:  new THREE.SphereGeometry(1.8, 12, 12)
     });
 
 

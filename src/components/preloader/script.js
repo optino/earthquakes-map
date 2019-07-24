@@ -39,6 +39,7 @@ export default class Preloader extends $.FACTORY.BaseComponent {
         $.EVENTS.addEventListener('images-loaded', this.hideEffectsLayer.bind(this), true);
         $.EVENTS.addEventListener('texture-loaded', this.onNextEvent.bind(this));
         $.EVENTS.addEventListener('earthquakes-data-loaded', this.onNextEvent.bind(this));
+        $.EVENTS.addEventListener('animation-started', this.hidePreloader.bind(this));
 
         return this;
     }
@@ -50,7 +51,6 @@ export default class Preloader extends $.FACTORY.BaseComponent {
         this.domCache.counter.innerHTML = `${this.state.eventsCounter} / ${Preloader.numberOfEvents}`;
 
         if (this.state.eventsCounter === Preloader.numberOfEvents) {
-            _.animateElement(this.domCache.element, 'fade-out');
             $.EVENTS.fireEvent('all-resources-loaded');
         }
     }
@@ -59,6 +59,13 @@ export default class Preloader extends $.FACTORY.BaseComponent {
     hideEffectsLayer() {
         setTimeout(() => {
             _.animateElement(this.domCache.effects, 'fade-out');
+        }, 300);
+    }
+
+
+    hidePreloader() {
+        setTimeout(() => {
+            _.animateElement(this.domCache.element, 'fade-out');
         }, 300);
     }
 }

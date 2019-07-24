@@ -16,6 +16,7 @@ export default class Info extends $.FACTORY.BaseComponent {
         this.domCache = _.extend(this.domCache, {
             version: element.querySelector('.version'),
             dates: element.querySelector('.dates'),
+            counter: element.querySelector('.counter')
         });
 
         if (this.domCache.version) {
@@ -28,6 +29,23 @@ export default class Info extends $.FACTORY.BaseComponent {
             oneYearAgo.setYear(today.getFullYear() - 1);
 
             this.domCache.dates.innerHTML = `${EarthquakeLoader.formatDate(oneYearAgo)} ~ ${EarthquakeLoader.formatDate(today)}`;
+        }
+
+        this.initEventListeners();
+    }
+
+
+    initEventListeners() {
+        $.EVENTS.addEventListener('earthquakes-data-updated', this.onDataUpdated.bind(this));
+    }
+
+
+    onDataUpdated() {
+        const data = JSON.parse($.STORE.get('earthquakes-data'));
+        const featuresLength = data.features.length;
+
+        if (this.domCache.counter) {
+            this.domCache.counter.innerHTML = featuresLength;
         }
     }
 }

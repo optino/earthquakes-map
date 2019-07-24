@@ -33,12 +33,10 @@ export default class Earth extends SceneObject {
 
             $.EVENTS.fireEvent('texture-loaded');
 
-            $.EVENTS.addEventListener('animation-started', () => {
+            $.EVENTS.addEventListener('all-resources-loaded', () => {
                 Earth.loaders.imageLoader.load(textureURL, (image) => {
                     texture.image = image;
                     texture.needsUpdate = true;
-
-                    // $.EVENTS.fireEvent('texture-loaded');
                 });
             });
         });
