@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Earthquakes Map</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="prefetch" href="https://fonts.googleapis.com/css?family=Nunito&amp;amp;display=swap">
+    <link rel="prefetch" href="./css/muilessium-ui.min.css">
+    <link rel="prefetch" href="./css/main.min.css">
+    <link rel="prefetch" href="./js/muilessium.min.js">
+    <link rel="prefetch" href="./js/muilessium-ui.min.js">
+    <link rel="prefetch" href="./js/main.min.js">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon/favicon-16x16.png">
+<link rel="manifest" href="/images/favicon/site.webmanifest">
+<link rel="mask-icon" href="/images/favicon/safari-pinned-tab.svg" color="#0d47a1">
+<link rel="shortcut icon" href="/images/favicon/favicon.ico">
+<meta name="msapplication-TileColor" content="#0d47a1">
+<meta name="msapplication-TileImage" content="/images/favicon/mstile-144x144.png">
+<meta name="msapplication-config" content="/images/favicon/browserconfig.xml">
+<meta name="theme-color" content="#0d47a1">
+    <style>
+      body{overflow:hidden}html{font-family:Nunito,sans-serif}html{font-family:sans-serif;line-height:1.15;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}pre{font-family:monospace,monospace;font-size:1em}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}*,:after,:before{margin:0;padding:0;box-sizing:border-box}html{height:100%;color:#000;background-color:#fff}body{display:flex;flex-direction:column;min-height:100%;min-width:320px}:focus{outline:0}html{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;font-size:calc(14px + 6*(100vw - 400px)/ 800);line-height:1.5}@media screen and (max-width:400px){html{font-size:14px}}@media screen and (min-width:1200px){html{font-size:20px}}
+    </style>
+</head>
+  <body>
+    <div class="mui-scroll-fix"></div>
+    <div class="ui-earth-renderer _z-1"></div>
+    <div class="ui-preloader _z-2">
+      <div class="mui-hero-header -full-height"><img class="mui-image background -js-lazy-load" data-src="./images/background.png" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Background">
+        <noscript><img class="mui-image background" src="./images/background.png" alt="Background"></noscript>
+        <div class="effects _allow-empty"></div>
+        <div class="content -white-bg">
+          <h1 class="-black _bigger-1">Earthquakes Map</h1>
+          <div class="-black">Loading...</div>
+          <div class="mui-spinner _separate-top-1 _text-center">
+            <svg class="mui-svg-icon -black">
+              <use xlink:href="#mui-svg-icon--spinner"/>
+            </svg>
+          </div>
+          <div class="counter -black _smaller-2">0 / 4</div>
+        </div>
+      </div>
+    </div>
+    <div class="ui-logo _z-2"><img class="mui-image -js-lazy-load" data-src="./images/favicon/android-chrome-192x192.png" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Earthquakes Map - Logo">
+      <noscript><img class="mui-image" src="./images/favicon/android-chrome-192x192.png" alt="Earthquakes Map - Logo"></noscript><img class="mui-image -js-lazy-load" data-src="./images/usgs-logo.svg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="USGS Logo">
+      <noscript><img class="mui-image" src="./images/usgs-logo.svg" alt="USGS - Logo"></noscript><img class="mui-image -js-lazy-load" data-src="./images/webgl-logo.svg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="WebGL Logo">
+      <noscript><img class="mui-image" src="./images/webgl-logo.svg" alt="WebGL - Logo"></noscript>
+    </div>
+    <div class="ui-info -right _smaller-2 _z-2"><span class="name">Earthquakes Map &nbsp;</span><span class="version">v1.0.0-alpha.3</span><br><span>By&nbsp;</span><a class="link" href="https://sfi0zy.github.io" target="_blank">@sfi0zy</a></div>
+    <div class="ui-info -left _smaller-2 _z-2"><span class="dates">Loading...</span><span>&nbsp; (magnitude &gt;= 5)</span><br><span>Earthquakes in last 24 hours are pulsing.</span><br><span>Double click the points to see more information.</span></div>
+    <div class="mui-ribbon -classic -top -right _text-transform-disabled _z-2"><a class="-black -f-blue-3" href="https://github.com/sfi0zy/earthquakes-map" target="_blank">GitHub</a></div>
+    <div class="mui-svg-sprite">
+      <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <symbol id="mui-svg-icon--spinner" viewbox="0 0 512 512">
+          <path d="M256 48c-75.033 0-144.531 40.658-181.373 106.107l-1.963 3.485 20.915 11.771 1.962-3.485C128.138 107.973 189.621 72 256 72c101.458 0 184 82.542 184 184a185.48 185.48 0 0 1-3.749 37.147l-.803 3.918 23.511 4.819.804-3.919A209.53 209.53 0 0 0 464 256c0-114.691-93.309-208-208-208zM416.459 346.119C383.862 404.027 322.379 440 256 440c-101.458 0-184-82.542-184-184 0-12.512 1.262-25.011 3.75-37.15l.803-3.918-23.511-4.819-.804 3.918A209.445 209.445 0 0 0 48 256c0 114.691 93.309 208 208 208 75.033 0 144.531-40.658 181.373-106.109l1.963-3.485-20.915-11.771-1.962 3.484z"/>
+          <path d="M384 256l64 64 64-64zM0 256l64-64 64 64z"/>
+        </symbol>
+      </svg>
+    </div>
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Nunito&amp;display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito&amp;display=swap"></noscript>
+    <link rel="preload" href="css/muilessium-ui.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="css/muilessium-ui.min.css"></noscript>
+    <link rel="preload" href="css/main.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="css/main.min.css"></noscript>
+    <script>!function(n){"use strict";n.loadCSS||(n.loadCSS=function(){});var o=loadCSS.relpreload={};if(o.support=function(){var e;try{e=n.document.createElement("link").relList.supports("preload")}catch(t){e=!1}return function(){return e}}(),o.bindMediaToggle=function(t){var e=t.media||"all";function a(){t.addEventListener?t.removeEventListener("load",a):t.attachEvent&&t.detachEvent("onload",a),t.setAttribute("onload",null),t.media=e}t.addEventListener?t.addEventListener("load",a):t.attachEvent&&t.attachEvent("onload",a),setTimeout(function(){t.rel="stylesheet",t.media="only x"}),setTimeout(a,3e3)},o.poly=function(){if(!o.support())for(var t=n.document.getElementsByTagName("link"),e=0;e<t.length;e++){var a=t[e];"preload"!==a.rel||"style"!==a.getAttribute("as")||a.getAttribute("data-loadcss")||(a.setAttribute("data-loadcss",!0),o.bindMediaToggle(a))}},!o.support()){o.poly();var t=n.setInterval(o.poly,500);n.addEventListener?n.addEventListener("load",function(){o.poly(),n.clearInterval(t)}):n.attachEvent&&n.attachEvent("onload",function(){o.poly(),n.clearInterval(t)})}"undefined"!=typeof exports?exports.loadCSS=loadCSS:n.loadCSS=loadCSS}("undefined"!=typeof global?global:this);</script>
+    <script src="js/muilessium.min.js"></script>
+    <script src="js/muilessium-ui.min.js"></script>
+    <script src="js/main.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-53893511-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </body>
+</html>
