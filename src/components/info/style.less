@@ -1,0 +1,48 @@
+// -----------------------------------------------------------------------------
+//  Info
+// -----------------------------------------------------------------------------
+
+.@{global-prefix}info {
+    position: absolute;
+    bottom: 1rem;
+    color: @white;
+
+    &.-right {
+        text-align: right;
+        right: 1rem;
+
+        @media screen and (max-width: 40rem) {
+            text-align: left;
+            left: 0;
+            right: auto;
+            bottom: 0;
+            width: 100%;
+            padding: 1rem;
+            background: @white;
+            color: @black;
+        }
+    }
+
+    &.-left {
+        text-align: left;
+        left: 1rem;
+
+        @media screen and (max-width: 40rem) {
+            bottom: 6rem;
+        }
+    }
+
+    > .link {
+        color: @white;
+
+        &:hover,
+        &:focus {
+            color: @blue-3;
+        }
+
+        @media screen and (max-width: 40rem) {
+            color: @black;
+        }
+    }
+}
+

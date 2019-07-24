@@ -1,0 +1,54 @@
+extends ./layouts/default.pug
+
+block append head
+    //- ...
+
+block append footer
+    //- ...
+
+block content
+    .ui-earth-renderer._z-1
+
+    .ui-preloader._z-2
+        .mui-hero-header.-full-height
+            img.mui-image.background.-js-lazy-load(data-src='./images/background.png' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7' alt='Background')
+            noscript
+                img.mui-image.background(src='./images/background.png' alt='Background')
+            .effects._allow-empty
+            .content.-white-bg
+                h1.-black._bigger-1 Earthquakes Map
+                .-black Loading...
+                .mui-spinner._separate-top-1._text-center
+                    svg.mui-svg-icon.-black
+                        use(xlink:href='#mui-svg-icon--spinner')
+                .counter.-black._smaller-2 0 / 4
+
+    .ui-logo._z-2
+        img.mui-image.-js-lazy-load(data-src='./images/favicon/android-chrome-192x192.png' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7' alt='Earthquakes Map - Logo')
+        noscript
+            img.mui-image(src='./images/favicon/android-chrome-192x192.png' alt='Earthquakes Map - Logo')
+        img.mui-image.-js-lazy-load(data-src='./images/usgs-logo.svg' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7' alt='USGS Logo')
+        noscript
+            img.mui-image(src='./images/usgs-logo.svg' alt='USGS - Logo')
+        img.mui-image.-js-lazy-load(data-src='./images/webgl-logo.svg' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7' alt='WebGL Logo')
+        noscript
+            img.mui-image(src='./images/webgl-logo.svg' alt='WebGL - Logo')
+
+    .ui-info.-right._smaller-2._z-2
+        span.name Earthquakes Map &nbsp;
+        span.version v#{pkg.version}
+        br
+        span By&nbsp;
+        a.link(href='https://sfi0zy.github.io' target='_blank') @sfi0zy
+
+    .ui-info.-left._smaller-2._z-2
+        span.dates Loading...
+        span &nbsp; (magnitude &gt;= 5)
+        br
+        span Earthquakes in last 24 hours are pulsing.
+        br
+        span Double click the points to see more information.
+
+    .mui-ribbon.-classic.-top.-right._text-transform-disabled._z-2
+        a.-black.-f-blue-3(href='https://github.com/sfi0zy/earthquakes-map' target='_blank') GitHub
+
