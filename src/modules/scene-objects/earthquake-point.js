@@ -51,9 +51,9 @@ export default class EarthquakePoint extends SceneObject {
         let result;
 
         if (magnitude < 7) {
-            result = EarthquakePoint.materialsCache.orange.clone();
+            result = EarthquakePoint.materialsCache.orange;
         } else {
-            result = EarthquakePoint.materialsCache.red.clone();
+            result = EarthquakePoint.materialsCache.red;
         } 
 
         return result;
@@ -77,13 +77,13 @@ export default class EarthquakePoint extends SceneObject {
         let result;
 
         if (magnitude < 6) {
-            result = EarthquakePoint.spheresCache.small.clone();
+            result = EarthquakePoint.spheresCache.small;
         } else if (magnitude < 7) {
-            result = EarthquakePoint.spheresCache.medium.clone();
+            result = EarthquakePoint.spheresCache.medium;
         } else if (magnitude < 8) {
-            result = EarthquakePoint.spheresCache.big.clone();
+            result = EarthquakePoint.spheresCache.big;
         } else {
-            result = EarthquakePoint.spheresCache.extra.clone();
+            result = EarthquakePoint.spheresCache.extra;
         }
 
         return result;
@@ -99,6 +99,7 @@ export default class EarthquakePoint extends SceneObject {
         this.lastSavedState = this.state;
         this.mesh = null;
         this.stateEffectTimer = null;
+        this.hasClonedMaterial = false;
 
         this.init();
     }
@@ -115,15 +116,26 @@ export default class EarthquakePoint extends SceneObject {
         this.mesh.position.set(...(this.positionXYZ));
 
         if (inLast24Hours(this.feature.properties.time)) {
+            this.cloneMaterial();
             this.setState(EarthquakePoint.states.pulse);
             this.lastSavedState = EarthquakePoint.states.pulse;
         }
     }
 
 
+    cloneMaterial() {
+        this.mesh.material = this.mesh.material.clone();
+        this.hasClonedMaterial = true;
+    }
+
+
     setState(state) {
         if (this.state === state) {
             return;
+        }
+
+        if (!this.hasCloneMaterial) {
+            this.cloneMaterial();
         }
 
         if (this.state !== EarthquakePoint.states.focus) {

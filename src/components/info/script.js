@@ -41,7 +41,7 @@ export default class Info extends $.FACTORY.BaseComponent {
 
 
     onDataUpdated() {
-        const data = JSON.parse($.STORE.get('earthquakes-data'));
+        const data = $.STORE.get('earthquakes-data');
         const featuresLength = data.features.length;
 
         if (this.domCache.counter) {

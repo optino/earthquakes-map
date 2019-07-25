@@ -9,6 +9,7 @@ const EffectComposer = require('postprocessing').EffectComposer;
 const RenderPass     = require('postprocessing').RenderPass;
 const EffectPass     = require('postprocessing').EffectPass;
 const BloomEffect    = require('postprocessing').BloomEffect;
+const av             = require('animate-value');
 
 
 const DEPENDENCIES = {
@@ -17,7 +18,8 @@ const DEPENDENCIES = {
     EffectComposer,
     RenderPass,
     EffectPass,
-    BloomEffect
+    BloomEffect,
+    av
 };
 
 export default DEPENDENCIES;

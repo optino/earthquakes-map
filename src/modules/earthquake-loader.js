@@ -21,7 +21,7 @@ export class EarthquakeLoader {
         const url = `https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=${EarthquakeLoader.formatDate(oneYearAgo)}&endtime=${EarthquakeLoader.formatDate(today)}&minmagnitude=5`;
 
         _.ajax.get(url, (data) => {
-            $.STORE.set('earthquakes-data', data);
+            $.STORE.set('earthquakes-data', JSON.parse(data));
             $.EVENTS.fireEvent('earthquakes-data-loaded');
             $.EVENTS.fireEvent('earthquakes-data-updated');
         });

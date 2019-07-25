@@ -122,7 +122,7 @@ export default class EarthRenderer extends $.FACTORY.BaseComponent {
 
     initWorld() {
         this.earth = new $.MODULES.sceneObjects.Earth('./images/earth.jpg', './images/earth-small.jpg');
-        this.stars = new $.MODULES.sceneObjects.Stars('./images/stars.jpg');
+        this.stars = new $.MODULES.sceneObjects.Stars('./images/stars.jpg', './images/stars-small.jpg');
 
         this.scene.add(this.earth.mesh);
         this.scene.add(this.stars.mesh);
@@ -156,17 +156,33 @@ export default class EarthRenderer extends $.FACTORY.BaseComponent {
         const newPoints = new THREE.Group();
 
         newPoints.name = 'points';
-
-        _.forEach(this.earth.points, (point) => {
-            newPoints.add(point.mesh);
-            this.pointsMeshesCache.push(point.mesh);
-        });
-
         this.scene.add(newPoints);
+
+        let pointsAdded = 0;
+
+        const interval = setInterval(() => {
+            for (let i = 0; i < 10; i++) {
+                const point = this.earth.points[pointsAdded + i];
+
+                if (point) {
+                    newPoints.add(point.mesh);
+                    this.pointsMeshesCache.push(point.mesh);
+                } else {
+                    clearInterval(interval);
+                    $.EVENTS.fireEvent('all-points-rendered');
+                }
+            }
+
+            pointsAdded += 10;
+        }, 20);
     }
 
 
     useRaycaster() {
+        if (!this.pointsMeshesCache) {
+            return;
+        }
+
         const intersects = this.raycaster.intersectObjects(this.pointsMeshesCache);
 
         if (intersects[0]) {
@@ -210,7 +226,10 @@ export default class EarthRenderer extends $.FACTORY.BaseComponent {
 
 
     animate() {
-        this.useRaycaster();
+        if (this.controls.isMouseSlow) {
+            this.useRaycaster();
+        }
+
         this.controls.update();
         this.render();
 

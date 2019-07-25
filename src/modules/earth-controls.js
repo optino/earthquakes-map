@@ -32,6 +32,9 @@ export default class EarthControls {
 
         this.isUserAFK = false;
         this.AFKTimer = null;
+        this.mouseSpeed = 0;
+        this.isMouseSlow = false;
+        this.oldMousePosition = { x: 0, y: 0 }; 
 
         this.orbitControls.update();
 
@@ -49,6 +52,7 @@ export default class EarthControls {
         this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
         this.isUserAFK = false;
+        this.isMouseStatic = false;
 
         if (this.AFKTimer) {
             clearTimeout(this.AFKTimer);
@@ -57,6 +61,19 @@ export default class EarthControls {
         this.AFKTimer = setTimeout(() => {
             this.isUserAFK = true;
         }, 10000);
+
+        const deltaX = event.pageX - this.oldMousePosition.x;
+        const deltaY = event.pageY - this.oldMousePosition.y;
+        const distance = Math.sqrt((deltaX * deltaX) + (deltaY * deltaY));
+
+        this.mouseSpeed = distance;
+
+        this.isMouseSlow = (distance < window.innerWidth / 50);
+
+        this.oldMousePosition = {
+            x: event.pageX,
+            y: event.pageY
+        };
     }
 
 

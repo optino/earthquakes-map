@@ -8,7 +8,7 @@ const _ = window.Muilessium.UTILS;
 
 
 export default class Preloader extends $.FACTORY.BaseComponent {
-    static numberOfEvents = 4;
+    static numberOfEvents = 2;
 
 
     constructor(element, options) {
@@ -37,7 +37,6 @@ export default class Preloader extends $.FACTORY.BaseComponent {
     initEventListeners() {
         $.EVENTS.addEventListener('main-executed', this.onNextEvent.bind(this), true);
         $.EVENTS.addEventListener('images-loaded', this.hideEffectsLayer.bind(this), true);
-        $.EVENTS.addEventListener('texture-loaded', this.onNextEvent.bind(this));
         $.EVENTS.addEventListener('earthquakes-data-loaded', this.onNextEvent.bind(this));
         $.EVENTS.addEventListener('animation-started', this.hidePreloader.bind(this));
 
@@ -66,7 +65,7 @@ export default class Preloader extends $.FACTORY.BaseComponent {
     hidePreloader() {
         setTimeout(() => {
             _.animateElement(this.domCache.element, 'fade-out');
-        }, 300);
+        }, 100);
     }
 }
 
