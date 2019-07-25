@@ -21,7 +21,7 @@ block content
                 .mui-spinner._separate-top-1._text-center
                     svg.mui-svg-icon.-black
                         use(xlink:href='#mui-svg-icon--spinner')
-                .counter.-black._smaller-2 0 / 4
+                .counter.-black._smaller-2 0 / 2
 
     .ui-logo._z-2
         img.mui-image.-js-lazy-load(data-src='./images/favicon/android-chrome-192x192.png' src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7' alt='Earthquakes Map - Logo')
@@ -38,13 +38,17 @@ block content
         span.name Earthquakes Map &nbsp;
         span.version v#{pkg.version}
         br
+        span Google Chrome recommended
+        br
         span By&nbsp;
         a.link(href='https://sfi0zy.github.io' target='_blank') @sfi0zy
 
     .ui-info.-left._smaller-2._z-2
         span.dates Loading...
-        span &nbsp; (mag &gt; 5) =&nbsp;
-        span.counter ????
+        span &nbsp; (magnitude &gt; 5)
+        br
+        span.counter Loading...
+        span &nbsp;events
         br
         span Earthquakes in last 24 hours are pulsing.
         br

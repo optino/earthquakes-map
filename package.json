@@ -1,6 +1,6 @@
 {
   "name": "earthquakes-map",
-  "version": "1.0.0-alpha.3",
+  "version": "1.0.0-alpha.4",
   "description": "Earthquakes on a globe",
   "keywords": "webgl, earthquakes",
   "author": "Ivan Bogachev <sfi0zy@gmail.com>",
