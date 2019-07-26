@@ -4,7 +4,7 @@
 
 
 const $ = window.Muilessium;
-const _ = window.Muilessium.UTILS;
+const _ = $.UTILS;
 
 
 export default class Preloader extends $.FACTORY.BaseComponent {

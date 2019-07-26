@@ -10,3 +10,8 @@ export function inLast24Hours(date) {
     return date > oneDayAgo;
 }
 
+
+export function formatDateForUSGSAPI(date) {
+    return `${date.getFullYear()}-${(date.getMonth() + 1)}-${date.getDate()}`;
+}
+

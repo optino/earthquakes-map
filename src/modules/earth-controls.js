@@ -3,16 +3,16 @@
 // -----------------------------------------------------------------------------
 
 
-import DEPENDENCIES from '../dependencies';
+const $ = window.Muilessium;
 
-const THREE = DEPENDENCIES.THREE;
+const THREE = $.DEPENDENCIES.THREE;
 
 
 export default class EarthControls {
     constructor(camera) {
         this.mouse = new THREE.Vector2();
 
-        this.orbitControls = new DEPENDENCIES.OrbitControls(camera);
+        this.orbitControls = new $.DEPENDENCIES.OrbitControls(camera);
 
         this.orbitControls.minPolarAngle = Math.PI * 1 / 4;
         this.orbitControls.maxPolarAngle = Math.PI * 3 / 4;

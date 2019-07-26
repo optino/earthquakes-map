@@ -3,16 +3,14 @@
 // -----------------------------------------------------------------------------
 
 
-import DEPENDENCIES from '../../dependencies';
 import SceneObject from './scene-object';
 import EarthquakePoint from './earthquake-point';
-import { EarthquakeLoader } from '../earthquake-loader';
 
 const $ = window.Muilessium;
-const _ = window.Muilessium.UTILS;
+const _ = $.UTILS;
 
-const THREE = DEPENDENCIES.THREE;
-const av    = DEPENDENCIES.av;
+const THREE = $.DEPENDENCIES.THREE;
+const av    = $.DEPENDENCIES.av;
 
 
 export default class Earth extends SceneObject {
@@ -104,7 +102,7 @@ export default class Earth extends SceneObject {
 
         this.initEventListeners();
 
-        EarthquakeLoader.loadData();
+        Earth.loaders.earthquakeLoader.constructor.loadData();
     }
 
 

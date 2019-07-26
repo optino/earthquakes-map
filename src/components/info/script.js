@@ -3,10 +3,8 @@
 // -----------------------------------------------------------------------------
 
 
-import { EarthquakeLoader } from '../../modules/earthquake-loader';
-
 const $ = window.Muilessium;
-const _ = window.Muilessium.UTILS;
+const _ = $.UTILS;
 
 
 export default class Info extends $.FACTORY.BaseComponent {
@@ -15,7 +13,7 @@ export default class Info extends $.FACTORY.BaseComponent {
 
         this.domCache = _.extend(this.domCache, {
             version: element.querySelector('.version'),
-            dates: element.querySelector('.dates'),
+            dates:   element.querySelector('.dates'),
             counter: element.querySelector('.counter')
         });
 
@@ -24,11 +22,15 @@ export default class Info extends $.FACTORY.BaseComponent {
         }
 
         if (this.domCache.dates) {
-            const today = new Date();
-            const oneYearAgo = new Date();
+            let today = new Date();
+            let oneYearAgo = new Date();
+
             oneYearAgo.setYear(today.getFullYear() - 1);
 
-            this.domCache.dates.innerHTML = `${EarthquakeLoader.formatDate(oneYearAgo)} ~ ${EarthquakeLoader.formatDate(today)}`;
+            today = _.formatDateForUSGSAPI(today);
+            oneYearAgo = _.formatDateForUSGSAPI(oneYearAgo);
+
+            this.domCache.dates.innerHTML = `${oneYearAgo} ~ ${today}`;
         }
 
         this.initEventListeners();

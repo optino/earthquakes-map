@@ -6,7 +6,7 @@
 import * as dates from './utils/dates';
 
 const UTILS = {
-    dates
+    ...dates
 };
 
 export default UTILS;

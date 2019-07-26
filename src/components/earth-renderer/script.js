@@ -3,14 +3,10 @@
 // -----------------------------------------------------------------------------
 
 
-import DEPENDENCIES from '../../dependencies';
-
 const $ = window.Muilessium;
-const _ = window.Muilessium.UTILS;
+const _ = $.UTILS;
 
-const THREE = DEPENDENCIES.THREE;
-
-const EarthquakePoint = $.MODULES.sceneObjects.EarthquakePoint;
+const THREE = $.DEPENDENCIES.THREE;
 
 
 export default class EarthRenderer extends $.FACTORY.BaseComponent {
@@ -98,15 +94,15 @@ export default class EarthRenderer extends $.FACTORY.BaseComponent {
 
 
     initComposer() {
-        this.composer = new DEPENDENCIES.EffectComposer(this.renderer);
+        this.composer = new $.DEPENDENCIES.EffectComposer(this.renderer);
         this.composer.setSize(window.innerWidth, window.innerHeight);
 
-        const renderPass = new DEPENDENCIES.RenderPass(this.scene, this.camera);
+        const renderPass = new $.DEPENDENCIES.RenderPass(this.scene, this.camera);
         this.composer.addPass(renderPass);
 
-        const effectPass = new DEPENDENCIES.EffectPass(
+        const effectPass = new $.DEPENDENCIES.EffectPass(
             this.camera,
-            new DEPENDENCIES.BloomEffect()
+            new $.DEPENDENCIES.BloomEffect()
         );
 
         effectPass.renderToScreen = true;
@@ -190,7 +186,7 @@ export default class EarthRenderer extends $.FACTORY.BaseComponent {
 
             _.forEach(this.earth.points, (point) => {
                 if (point.mesh.uuid === intersects[0].object.uuid) {
-                    point.setState(EarthquakePoint.states.focus);
+                    point.setState($.MODULES.sceneObjects.EarthquakePoint.states.focus);
                     this.state.hoveredPoint = point;
                 } else {
                     point.restoreLastSavedState();

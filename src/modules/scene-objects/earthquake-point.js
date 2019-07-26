@@ -3,12 +3,12 @@
 // -----------------------------------------------------------------------------
 
 
-import DEPENDENCIES from '../../dependencies';
 import SceneObject from './scene-object';
 
-import { inLast24Hours } from '../../utils/dates';
+const $ = window.Muilessium;
+const _ = $.UTILS;
 
-const THREE = DEPENDENCIES.THREE;
+const THREE = $.DEPENDENCIES.THREE;
 
 
 export default class EarthquakePoint extends SceneObject {
@@ -115,7 +115,7 @@ export default class EarthquakePoint extends SceneObject {
 
         this.mesh.position.set(...(this.positionXYZ));
 
-        if (inLast24Hours(this.feature.properties.time)) {
+        if (_.inLast24Hours(this.feature.properties.time)) {
             this.cloneMaterial();
             this.setState(EarthquakePoint.states.pulse);
             this.lastSavedState = EarthquakePoint.states.pulse;

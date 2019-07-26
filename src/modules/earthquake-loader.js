@@ -4,21 +4,19 @@
 
 
 const $ = window.Muilessium;
-const _ = window.Muilessium.UTILS;
+const _ = $.UTILS;
 
 
-export class EarthquakeLoader {
-    static formatDate(date) {
-        return `${date.getFullYear()}-${(date.getMonth() + 1)}-${date.getDate()}`;
-    }
-
-
+class EarthquakeLoader {
     static loadData() {
-        const today = new Date();
-        const oneYearAgo = new Date();
+        let today = new Date();
+        let oneYearAgo = new Date();
         oneYearAgo.setYear(today.getFullYear() - 1);
 
-        const url = `https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=${EarthquakeLoader.formatDate(oneYearAgo)}&endtime=${EarthquakeLoader.formatDate(today)}&minmagnitude=5`;
+        today = _.formatDateForUSGSAPI(today);
+        oneYearAgo = _.formatDateForUSGSAPI(oneYearAgo);
+
+        const url = `https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=${oneYearAgo}&endtime=${today}&minmagnitude=5`;
 
         _.ajax.get(url, (data) => {
             $.STORE.set('earthquakes-data', JSON.parse(data));

@@ -19,14 +19,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const _ = $.UTILS;
 
     $.EVENTS.addEvent('main-executed');
-
     $.EVENTS.addEvent('earthquakes-data-loaded');
     $.EVENTS.addEvent('all-resources-loaded');
-
     $.EVENTS.addEvent('earthquakes-data-updated');
     $.EVENTS.addEvent('earthquake-points-updated');
     $.EVENTS.addEvent('all-points-rendered');
-
     $.EVENTS.addEvent('animation-started');
 
     window.Muilessium.DEPENDENCIES = _.extend($.DEPENDENCIES, DEPENDENCIES);
@@ -35,17 +32,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.Muilessium.MODULES = require('./modules').default;
 
-    function addComponents() {
-        const components = require('./components/index').default;
+    const components = require('./components/index').default;
 
-        _.forEach(Object.keys(components), (type) => {
-            $.FACTORY.registerComponent(type, components[type]);
-            $.FACTORY.create(type, `.${GLOBAL_PREFIX}${_.toLispCase(type)}`, {});
-        });
-    }
-
-    addComponents();
+    _.forEach(Object.keys(components), (type) => {
+        $.FACTORY.registerComponent(type, components[type]);
+        $.FACTORY.create(type, `.${GLOBAL_PREFIX}${_.toLispCase(type)}`, {});
+    });
 
     $.EVENTS.fireEvent('main-executed');
+
+    $.EVENTS.addEventListener('animation-started', () => {
+        console.log(`Earthquakes map ${__PROJECT_VERSION__}`);
+        console.log(`DEBUG: ${__DEBUG__}`);
+        console.log($);
+    }, true);
 });
 

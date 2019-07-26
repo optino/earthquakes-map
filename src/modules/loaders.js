@@ -3,12 +3,10 @@
 // -----------------------------------------------------------------------------
 
 
-import DEPENDENCIES from '../dependencies';
 import earthquakeLoader from './earthquake-loader';
 
-const THREE = DEPENDENCIES.THREE;
-
 const $ = window.Muilessium;
+const THREE = $.DEPENDENCIES.THREE;
 
 
 class Loaders {

@@ -3,13 +3,12 @@
 // -----------------------------------------------------------------------------
 
 
-import DEPENDENCIES from '../../dependencies';
 import SceneObject from './scene-object';
 
-const THREE = DEPENDENCIES.THREE;
-const av    = DEPENDENCIES.av;
-
 const $ = window.Muilessium;
+
+const THREE = $.DEPENDENCIES.THREE;
+const av    = $.DEPENDENCIES.av;
 
 
 export default class Stars extends SceneObject {
