@@ -21,7 +21,9 @@ export default class EarthquakePoint extends SceneObject {
 
     static colors = Object.freeze({
         orange: 0xff9800,
-        red: 0xf44336
+        red: 0xf44336,
+        green: 0x4caf50,
+        violet: 0x673ab7
     });
 
 
@@ -38,8 +40,16 @@ export default class EarthquakePoint extends SceneObject {
     static spheresCache = Object.freeze({
         small:  new THREE.SphereBufferGeometry(0.15, 8, 8),
         medium: new THREE.SphereBufferGeometry(0.45, 12, 12),
-        big:    new THREE.SphereBufferGeometry(0.9, 12, 12),
-        extra:  new THREE.SphereBufferGeometry(1.8, 12, 12)
+        big:    new THREE.SphereBufferGeometry(0.9,  12, 12),
+        extra:  new THREE.SphereBufferGeometry(1.8,  12, 12)
+    });
+
+
+    static alternativeGeometriesCache = Object.freeze({
+        small:  new THREE.CylinderBufferGeometry(0.15 * 2, 0.15 / 10, 6, 12),
+        medium: new THREE.CylinderBufferGeometry(0.45 * 2, 0.45 / 10, 12, 12),
+        big:    new THREE.CylinderBufferGeometry(0.9  * 2,  0.9 / 10, 24, 12),
+        extra:  new THREE.CylinderBufferGeometry(1.8  * 2,  1.8 / 10, 36, 12)
     });
 
 
@@ -86,11 +96,29 @@ export default class EarthquakePoint extends SceneObject {
     }
 
 
-    constructor(feature, position) {
+    static chooseAlternativeGeometry(magnitude) {
+        let result;
+
+        if (magnitude < 6) {
+            result = EarthquakePoint.alternativeGeometriesCache.small;
+        } else if (magnitude < 7) {
+            result = EarthquakePoint.alternativeGeometriesCache.medium;
+        } else if (magnitude < 8) {
+            result = EarthquakePoint.alternativeGeometriesCache.big;
+        } else {
+            result = EarthquakePoint.alternativeGeometriesCache.extra;
+        }
+
+        return result;
+    }
+
+
+    constructor(feature, position, angles) {
         super();
 
         this.feature = feature;
         this.positionXYZ = position;
+        this.angles = angles;
         this.state = EarthquakePoint.states.default;
         this.lastSavedState = this.state;
         this.mesh = null;
@@ -104,18 +132,34 @@ export default class EarthquakePoint extends SceneObject {
     init() {
         const magnitude = this.feature.properties.mag;
 
-        this.mesh = new THREE.Mesh(
-            EarthquakePoint.chooseSphere(magnitude),
-            EarthquakePoint.chooseMaterial(magnitude)
-        );
-
-        this.mesh.position.set(...(this.positionXYZ));
-
         if (_.inLast24Hours(this.feature.properties.time)) {
+            this.mesh = new THREE.Mesh(
+                EarthquakePoint.chooseAlternativeGeometry(magnitude),
+                EarthquakePoint.chooseMaterial(magnitude)
+            );
+
+            this.mesh.rotation.z = this.angles.phi;
+            this.mesh.rotation.y = this.angles.theta;
+
             this.cloneMaterial();
             this.setState(EarthquakePoint.states.pulse);
             this.lastSavedState = EarthquakePoint.states.pulse;
+        } else if (_.inLast30Days(this.feature.properties.time)) {
+            this.mesh = new THREE.Mesh(
+                EarthquakePoint.chooseAlternativeGeometry(magnitude),
+                EarthquakePoint.chooseMaterial(magnitude)
+            );
+
+            this.mesh.rotation.z = this.angles.phi;
+            this.mesh.rotation.y = this.angles.theta;
+        } else {
+            this.mesh = new THREE.Mesh(
+                EarthquakePoint.chooseSphere(magnitude),
+                EarthquakePoint.chooseMaterial(magnitude)
+            );
         }
+
+        this.mesh.position.set(...(this.positionXYZ));
     }
 
 
@@ -130,7 +174,7 @@ export default class EarthquakePoint extends SceneObject {
             return;
         }
 
-        if (!this.hasCloneMaterial) {
+        if (!this.hasClonedMaterial) {
             this.cloneMaterial();
         }
 
@@ -151,11 +195,18 @@ export default class EarthquakePoint extends SceneObject {
 
             case EarthquakePoint.states.pulse: {
                 this.state = state;
-                this.stateEffectTimer = setInterval(() => {
-                    const lightness = Math.floor((Math.sin(Date.now() / 100) + 1) * 50);
 
-                    this.mesh.material.color = new THREE.Color(`hsl(0, 100%, ${lightness}%)`);
-                }, 20);
+                let isHighlighted = false;
+
+                this.stateEffectTimer = setInterval(() => {
+                    isHighlighted = !isHighlighted;
+
+                    if (isHighlighted) {
+                        this.mesh.material.color = new THREE.Color(EarthquakePoint.colors.green);
+                    } else {
+                        this.mesh.material.color = new THREE.Color(EarthquakePoint.colors.violet);
+                    }
+                }, 500);
 
                 break;
             }

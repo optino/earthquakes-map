@@ -106,10 +106,20 @@ export default class Earth extends SceneObject {
     }
 
 
-
-    static calcPositionXYZ(coordinates) {
+    static calcPointAngles(coordinates) {
         const phi = (90 - coordinates[1]) * Math.PI / 180;
         const theta = (coordinates[0] + 180) * Math.PI / 180;
+
+        return {
+            phi,
+            theta
+        };
+    }
+
+
+    static calcPositionXYZ(angles) {
+        const phi = angles.phi;
+        const theta = angles.theta;
 
         const x = -Earth.radius * Math.sin(phi) * Math.cos(theta);
         const z =  Earth.radius * Math.sin(phi) * Math.sin(theta);
@@ -142,9 +152,10 @@ export default class Earth extends SceneObject {
 
         if (features) {
             _.forEach(features, (feature) => {
-                const position = Earth.calcPositionXYZ(feature.geometry.coordinates);
+                const angles = Earth.calcPointAngles(feature.geometry.coordinates);
+                const position = Earth.calcPositionXYZ(angles);
 
-                const point = new EarthquakePoint(feature, position);
+                const point = new EarthquakePoint(feature, position, angles);
 
                 this.points.push(point);
             });
