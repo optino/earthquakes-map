@@ -88,8 +88,10 @@ export default class EarthRenderer extends $.FACTORY.BaseComponent {
         this.renderer = new THREE.WebGLRenderer({ alpha: true });
         this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.setSize(window.innerWidth, window.innerHeight);
-        this.renderer.shadowMap.enabled = true;
-        this.renderer.shadowMapSort = true;
+
+        if (window.devicePixelRatio > 2) {
+            this.renderer.setPixelRatio(2);
+        }
     }
 
 
@@ -117,8 +119,8 @@ export default class EarthRenderer extends $.FACTORY.BaseComponent {
 
 
     initWorld() {
-        this.earth = new $.MODULES.sceneObjects.Earth('./images/earth.jpg', './images/earth-small.jpg');
-        this.stars = new $.MODULES.sceneObjects.Stars('./images/stars.jpg', './images/stars-small.jpg');
+        this.earth = new $.MODULES.sceneObjects.Earth(this.renderer, $.SETTINGS.earth);
+        this.stars = new $.MODULES.sceneObjects.Stars(this.renderer, $.SETTINGS.stars);
 
         this.scene.add(this.earth.mesh);
         this.scene.add(this.stars.mesh);
@@ -165,7 +167,6 @@ export default class EarthRenderer extends $.FACTORY.BaseComponent {
                     this.pointsMeshesCache.push(point.mesh);
                 } else {
                     clearInterval(interval);
-                    $.EVENTS.fireEvent('all-points-rendered');
                 }
             }
 

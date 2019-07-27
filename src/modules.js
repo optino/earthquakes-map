@@ -6,6 +6,7 @@
 import EarthControls    from './modules/earth-controls';
 import EarthquakeLoader from './modules/earthquake-loader';
 import Loaders          from './modules/loaders';
+import UpdatableTexture from './modules/updatable-texture';
 
 import SceneObject     from './modules/scene-objects/scene-object';
 import Earth           from './modules/scene-objects/earth';
@@ -17,6 +18,7 @@ const MODULES = {
     EarthControls,
     EarthquakeLoader,
     Loaders,
+    UpdatableTexture,
 
     sceneObjects: {
         SceneObject,

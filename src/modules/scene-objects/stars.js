@@ -4,6 +4,7 @@
 
 
 import SceneObject from './scene-object';
+import UpdatableTexture from '../updatable-texture';
 
 const $ = window.Muilessium;
 
@@ -12,12 +13,12 @@ const av    = $.DEPENDENCIES.av;
 
 
 export default class Stars extends SceneObject {
-    static createMesh(textureURL, textureFallbackURL) {
+    static createMesh(renderer, settings) {
         const group = new THREE.Group();
 
-        const emptySphere = new THREE.SphereGeometry(498, 12, 12);
-        const fallbackSphere = new THREE.SphereGeometry(499, 12, 12);
-        const sphere = new THREE.SphereGeometry(500, 12, 12);
+        const emptySphere    = new THREE.SphereBufferGeometry(500, 12, 12);
+        const fallbackSphere = new THREE.SphereBufferGeometry(499, 12, 12);
+        const sphere         = new THREE.SphereBufferGeometry(498, 12, 12);
 
         emptySphere.scale(-1, 1, 1);
         fallbackSphere.scale(-1, 1, 1);
@@ -25,50 +26,74 @@ export default class Stars extends SceneObject {
 
         const emptyMaterial = new THREE.MeshBasicMaterial({
             color: 0x000000,
-            opacity: 1,
-            transparent: true
         });
 
         const fallbackMaterial = new THREE.MeshBasicMaterial({
             map: new THREE.Texture(),
-            opacity: 1
+            transparent: true,
+            opacity: 0
         });
 
         const material = new THREE.MeshBasicMaterial({
-            map: new THREE.Texture()
+            map: new UpdatableTexture(),
+            transparent: true,
+            opacity: 0
         });
 
         $.EVENTS.addEventListener('animation-started', () => {
-            Stars.loaders.imageLoader.load(textureFallbackURL, (fallbackImage) => {
+            Stars.loaders.imageLoader.load(settings.fallbackTexture.url, (fallbackImage) => {
                 fallbackMaterial.map.image = fallbackImage;
                 fallbackMaterial.map.needsUpdate = true;
 
                 av({
-                    from: 1,
-                    to: 0,
-                    duration: 3000,
+                    from: 0,
+                    to: 1,
+                    duration: 2000,
                     change: (value) => {
-                        emptyMaterial.opacity = value;
-                    }
-                });
-
-                $.EVENTS.addEventListener('all-points-rendered', () => {
-                    Stars.loaders.imageLoader.load(textureURL, (image) => {
-                        material.map.image = image;
-                        material.map.needsUpdate = true;
-                        fallbackMaterial.transparent = true;
+                        fallbackMaterial.opacity = value;
+                    },
+                    done: () => {
+                        const texture = settings.texture;
 
                         av({
-                            from: 1,
-                            to: 0,
-                            duration: 3000,
-                            delay: 1000,
+                            from: 0,
+                            to: 1,
+                            duration: 7000,
                             change: (value) => {
-                                fallbackMaterial.opacity = value;
+                                material.opacity = value;
                             }
                         });
-                    });
-                }, true);
+
+                        material.map.setRenderer(renderer);
+                        material.map.setSize(texture.width, texture.height);
+
+                        const partsX = texture.width / texture.partSize;
+                        const partsY = texture.height / texture.partSize;
+
+                        for (let x = 0; x < partsX; x++) {
+                            for (let y = 0; y < partsY; y++) {
+                                const url = texture.urlTemplate.replace('{x}', x).replace('{y}', y);
+
+                                Stars.loaders.imageLoader.load(url, (partImage) => {
+                                    // The full texture is really big and Three.js
+                                    // can allocate a lot of memory for it. If we'll update it
+                                    // as the ordinary texture, it will cause a freeze effect
+                                    // for a couple of seconds. So we update it this way.
+                                    // The memory will not be allocated in the one moment
+                                    // and the user will be able to see some FPS reduction,
+                                    // but without hardcore lags.
+                                    setTimeout(() => {
+                                        material.map.update(
+                                            partImage,
+                                            x * texture.partSize,
+                                            y * texture.partSize
+                                        );
+                                    }, 5000 * Math.random());
+                                });
+                            }
+                        }
+                    }
+                });
             });
         }, true);
 
@@ -80,10 +105,10 @@ export default class Stars extends SceneObject {
     }
 
 
-    constructor(textureURL, textureFallbackURL) {
+    constructor(renderer, settings) {
         super();
 
-        this.mesh = Stars.createMesh(textureURL, textureFallbackURL);
+        this.mesh = Stars.createMesh(renderer, settings);
     }
 }
 

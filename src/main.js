@@ -23,13 +23,13 @@ document.addEventListener('DOMContentLoaded', () => {
     $.EVENTS.addEvent('all-resources-loaded');
     $.EVENTS.addEvent('earthquakes-data-updated');
     $.EVENTS.addEvent('earthquake-points-updated');
-    $.EVENTS.addEvent('all-points-rendered');
     $.EVENTS.addEvent('animation-started');
 
     window.Muilessium.DEPENDENCIES = _.extend($.DEPENDENCIES, DEPENDENCIES);
     window.Muilessium.POLYFILLS    = _.extend($.POLYFILLS,    POLYFILLS);
     window.Muilessium.UTILS        = _.extend($.UTILS,        UTILS);
 
+    window.Muilessium.SETTINGS = require('./settings').default;
     window.Muilessium.MODULES = require('./modules').default;
 
     const components = require('./components/index').default;
