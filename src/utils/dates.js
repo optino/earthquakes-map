@@ -11,6 +11,7 @@ export function inLast24Hours(date) {
 }
 
 
+// We use this API - https://earthquake.usgs.gov/fdsnws/event/1/
 export function formatDateForUSGSAPI(date) {
     return `${date.getFullYear()}-${(date.getMonth() + 1)}-${date.getDate()}`;
 }

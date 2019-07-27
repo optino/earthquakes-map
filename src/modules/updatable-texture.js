@@ -11,7 +11,6 @@ const $ = window.Muilessium;
 const THREE = $.DEPENDENCIES.THREE;
 
 
-
 export default class UpdatableTexture extends THREE.Texture {
     static isUpdatableTexture = true;
 

@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const $ = window.Muilessium;
     const _ = $.UTILS;
 
+    // See /docs/events.svg for more information about events.
     $.EVENTS.addEvent('main-executed');
     $.EVENTS.addEvent('earthquakes-data-loaded');
     $.EVENTS.addEvent('all-resources-loaded');
@@ -29,8 +30,10 @@ document.addEventListener('DOMContentLoaded', () => {
     window.Muilessium.POLYFILLS    = _.extend($.POLYFILLS,    POLYFILLS);
     window.Muilessium.UTILS        = _.extend($.UTILS,        UTILS);
 
+    // The order is important!
+    // We shouldn't import modules and components before dependencies, polyfills and utilities.
     window.Muilessium.SETTINGS = require('./settings').default;
-    window.Muilessium.MODULES = require('./modules').default;
+    window.Muilessium.MODULES  = require('./modules').default;
 
     const components = require('./components/index').default;
 
@@ -44,6 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
     $.EVENTS.addEventListener('animation-started', () => {
         console.log(`Earthquakes map ${__PROJECT_VERSION__}`);
         console.log(`DEBUG: ${__DEBUG__}`);
+
+        // We print this information after the start of the animation
+        // because all components will be initialized and we'll see their states.
         console.log($);
     }, true);
 });

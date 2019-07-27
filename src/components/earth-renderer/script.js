@@ -55,16 +55,6 @@ export default class EarthRenderer extends $.FACTORY.BaseComponent {
     initLights() {
         const ambient = new THREE.AmbientLight(0xffffff, 0.7);
         this.scene.add(ambient);
-
-        const directionalLight = new THREE.DirectionalLight(0xffffff);
-        directionalLight.position.set(0, 100, 100);
-        directionalLight.castShadow = true;
-        directionalLight.shadow.camera.left   = -50;
-        directionalLight.shadow.camera.right  =  50;
-        directionalLight.shadow.camera.top    =  50;
-        directionalLight.shadow.camera.bottom = -50;
-
-        this.scene.add(directionalLight);
     }
 
 
@@ -133,6 +123,7 @@ export default class EarthRenderer extends $.FACTORY.BaseComponent {
         this.domCache.element.addEventListener('dblclick', this.onDoubleClick.bind(this));
 
         $.EVENTS.addEventListener('earthquake-points-updated', this.onPointsUpdated.bind(this));
+
         $.EVENTS.addEventListener('all-resources-loaded', () => {
             this.animate();
             $.EVENTS.fireEvent('animation-started');
@@ -158,8 +149,12 @@ export default class EarthRenderer extends $.FACTORY.BaseComponent {
 
         let pointsAdded = 0;
 
+        // If we'll add several thousands of spheres to the scene in one frame,
+        // the renderer will render it slowly. So, we add them this way.
+        // It'll take some time. But the user will see something like loading
+        // animation instead of lag.
         const interval = setInterval(() => {
-            for (let i = 0; i < 10; i++) {
+            for (let i = 0; i < 50; i++) {
                 const point = this.earth.points[pointsAdded + i];
 
                 if (point) {
@@ -170,7 +165,7 @@ export default class EarthRenderer extends $.FACTORY.BaseComponent {
                 }
             }
 
-            pointsAdded += 10;
+            pointsAdded += 50;
         }, 20);
     }
 

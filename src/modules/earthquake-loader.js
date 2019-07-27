@@ -16,6 +16,7 @@ class EarthquakeLoader {
         today = _.formatDateForUSGSAPI(today);
         oneYearAgo = _.formatDateForUSGSAPI(oneYearAgo);
 
+        // More information - https://earthquake.usgs.gov/fdsnws/event/1/
         const url = `https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=${oneYearAgo}&endtime=${today}&minmagnitude=5`;
 
         _.ajax.get(url, (data) => {

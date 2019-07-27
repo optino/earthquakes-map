@@ -8,12 +8,13 @@ const _ = $.UTILS;
 
 
 export default class Preloader extends $.FACTORY.BaseComponent {
+    // It'll be only one instance of preloader,
+    // so we can use hardcoded number of events here.
     static numberOfEvents = 2;
 
 
     constructor(element, options) {
         super(element, options);
-
 
         this.domCache = _.extend(this.domCache, {
             effects: element.querySelector('.effects'),
@@ -24,13 +25,7 @@ export default class Preloader extends $.FACTORY.BaseComponent {
             eventsCounter: 0
         });
 
-        this.initControls();
         this.initEventListeners();
-    }
-
-
-    initControls() {
-        return this;
     }
 
 

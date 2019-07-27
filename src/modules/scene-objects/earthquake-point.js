@@ -152,7 +152,9 @@ export default class EarthquakePoint extends SceneObject {
             case EarthquakePoint.states.pulse: {
                 this.state = state;
                 this.stateEffectTimer = setInterval(() => {
-                    this.mesh.material.color = new THREE.Color(`hsl(0, 100%, ${Math.floor((Math.sin(Date.now() / 100) + 1) * 50)}%)`);
+                    const lightness = Math.floor((Math.sin(Date.now() / 100) + 1) * 50);
+
+                    this.mesh.material.color = new THREE.Color(`hsl(0, 100%, ${lightness}%)`);
                 }, 20);
 
                 break;
