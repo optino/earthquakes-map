@@ -11,7 +11,7 @@ const earth = {
     texture: {
         urlTemplate: './images/earth-{x}-{y}.jpg',
         partSize: 1024,
-        width: 8192,
+        width: 4096,
         height: 4096
     }
 };
@@ -26,7 +26,7 @@ const stars = {
     texture: {
         urlTemplate: './images/stars-{x}-{y}.jpg',
         partSize: 1024,
-        width: 8192,
+        width: 4096,
         height: 4096
     }
 };

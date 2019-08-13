@@ -18,11 +18,17 @@ export default class Stars extends SceneObject {
 
         const emptySphere    = new THREE.SphereBufferGeometry(500, 12, 12);
         const fallbackSphere = new THREE.SphereBufferGeometry(499, 12, 12);
-        const sphere         = new THREE.SphereBufferGeometry(498, 12, 12);
+
+        // The Google Chrome doesn't support big textures now. So we need to split
+        // the big texture of size 8192x4096 into the two textures of size 4096x4096.
+        // This is a bad solution, but it works in this case.
+        const spherePart1 = new THREE.SphereBufferGeometry(450, 64, 64, 0, Math.PI);
+        const spherePart2 = new THREE.SphereBufferGeometry(450, 64, 64, 0, Math.PI);
 
         emptySphere.scale(-1, 1, 1);
         fallbackSphere.scale(-1, 1, 1);
-        sphere.scale(-1, 1, 1);
+        spherePart1.scale(-1, 1, 1);
+        spherePart2.scale(-1, 1, 1);
 
         const emptyMaterial = new THREE.MeshBasicMaterial({
             color: 0x000000,
@@ -34,7 +40,13 @@ export default class Stars extends SceneObject {
             opacity: 0
         });
 
-        const material = new THREE.MeshBasicMaterial({
+        const materialPart1 = new THREE.MeshBasicMaterial({
+            map: new UpdatableTexture(),
+            transparent: true,
+            opacity: 0
+        });
+
+        const materialPart2 = new THREE.MeshBasicMaterial({
             map: new UpdatableTexture(),
             transparent: true,
             opacity: 0
@@ -60,17 +72,20 @@ export default class Stars extends SceneObject {
                             to: 1,
                             duration: 7000,
                             change: (value) => {
-                                material.opacity = value;
+                                materialPart1.opacity = value;
+                                materialPart2.opacity = value;
                             }
                         });
 
-                        material.map.setRenderer(renderer);
-                        material.map.setSize(texture.width, texture.height);
+                        materialPart1.map.setRenderer(renderer);
+                        materialPart1.map.setSize(texture.width, texture.height);
+                        materialPart2.map.setRenderer(renderer);
+                        materialPart2.map.setSize(texture.width, texture.height);
 
                         const partsX = texture.width / texture.partSize;
                         const partsY = texture.height / texture.partSize;
 
-                        for (let x = 0; x < partsX; x++) {
+                        for (let x = 0; x < partsX * 2; x++) {
                             for (let y = 0; y < partsY; y++) {
                                 const url = texture.urlTemplate.replace('{x}', x).replace('{y}', y);
 
@@ -83,11 +98,19 @@ export default class Stars extends SceneObject {
                                     // and the user will be able to see some FPS reduction,
                                     // but without hardcore lags.
                                     setTimeout(() => {
-                                        material.map.update(
-                                            partImage,
-                                            x * texture.partSize,
-                                            y * texture.partSize
-                                        );
+                                        if (x < partsX) {
+                                            materialPart1.map.update(
+                                                partImage,
+                                                x * texture.partSize,
+                                                y * texture.partSize
+                                            );
+                                        } else {
+                                            materialPart2.map.update(
+                                                partImage,
+                                                (x - partsX) * texture.partSize,
+                                                y * texture.partSize
+                                            );
+                                        }
                                     }, 5000 * Math.random());
                                 });
                             }
@@ -99,7 +122,12 @@ export default class Stars extends SceneObject {
 
         group.add(new THREE.Mesh(emptySphere, emptyMaterial));
         group.add(new THREE.Mesh(fallbackSphere, fallbackMaterial));
-        group.add(new THREE.Mesh(sphere, material));
+        group.add(new THREE.Mesh(spherePart1, materialPart1));
+
+        const part2 = new THREE.Mesh(spherePart2, materialPart2);
+
+        part2.rotation.y = Math.PI;
+        group.add(part2);
 
         return group;
     }
